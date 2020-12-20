@@ -1,0 +1,208 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Welcome to notifications service",
+    "version": "1.0.0",
+    "title": "Notifications Service",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "okasha.fci@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "description": "Local URL for notifications service",
+      "url": "/v1"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Ride",
+      "description": "All APIS for Rides module"
+    }
+  ],
+  "paths": {
+    "/ride/list/": {
+      "get": {
+        "summary": "Get all rides from database",
+        "tags": ["Ride"],
+        "security": [
+          {
+            "BearerAuth": ["read"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All Rides retrieved from database"
+          },
+          "500": {
+            "description": "Something went wrong"
+          }
+        }
+      }
+    },
+    "/ride/{id}": {
+      "get": {
+        "summary": "Get ride from database by id",
+        "tags": ["Ride"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ride id in the database"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": ["read"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Ride retrieved from database"
+          },
+          "500": {
+            "description": "Something went wrong"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove a ride from database by id",
+        "tags": ["Ride"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ride id in the database"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": ["read"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Ride deleted successfully from database"
+          },
+          "500": {
+            "description": "Something went wrong"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a ride on database by id",
+        "tags": ["Ride"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ride": {
+                    "properties": {
+                      "busLine": {
+                        "type": "string"
+                      },
+                      "userEmail": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ride id in the database"
+          }
+        ],
+        "security": [
+          {
+            "BearerAuth": ["read"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Ride updated successfully on database"
+          },
+          "500": {
+            "description": "Something went wrong"
+          }
+        }
+      }
+    },
+    "/ride/new/": {
+      "post": {
+        "summary": "Create new ride",
+        "tags": ["Ride"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ride": {
+                    "properties": {
+                      "busLine": {
+                        "type": "string"
+                      },
+                      "userEmail": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": ["read"]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New ride is successfully created"
+          },
+          "500": {
+            "description": "Something went wrong"
+          }
+        }
+      }
+    }
+  }
+}
