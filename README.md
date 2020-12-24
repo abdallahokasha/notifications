@@ -1,1 +1,1 @@
-### simple nodejs that conditionally push notification by sending Emails.
+### Simple Nodejs Notification service.
