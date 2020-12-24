@@ -1,5 +1,6 @@
 const Ride = require("../../models/ride");
 
+// ex: http://localhost:5000/v1/ride/new
 module.exports = async (req, resp) => {
   try {
     console.debug(`Create new Ride api, request body: ${req.body.ride}`);

@@ -4,6 +4,7 @@ const swaggerDocument = require("../swagger.json");
 const ride = require("./ride");
 const router = express.Router();
 
+// localhost:5000/v1/api-docs
 router.use("/api-docs", swaggerUi.serve);
 router.get("/api-docs", swaggerUi.setup(swaggerDocument));
 

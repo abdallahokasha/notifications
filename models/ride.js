@@ -8,6 +8,7 @@ const rideSchema = new Schema(
     userEmail: { type: String, required: true }
     // userMsisdn: {type: String}
     // trackPosition: {type: String} geospatial location
+    // MediumId: {type: Integer}
   },
   { timestamps: true }
 );

@@ -1,4 +1,5 @@
 const cron = require("node-cron");
+const bull = require("bull");
 const getRidesList = require("../utils/getRidesList");
 const sendEmail = require("../utils/mailer");
 const sendSMS = require("../utils/sendSMS");
