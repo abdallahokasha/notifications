@@ -3,6 +3,9 @@ const bull = require("bull");
 const getRidesList = require("../utils/getRidesList");
 const sendEmail = require("../utils/mailer");
 const sendSMS = require("../utils/sendSMS");
+
+const notificationsQueue = new Bull('notifications-queue');
+
 var checkRideUpdatesTask = cron.schedule(
   "* * * * *",
   () => {
@@ -17,6 +20,9 @@ var checkRideUpdatesTask = cron.schedule(
               subject: "Notifications service",
               html: `<p> Your Ride has been updated less than 5 mins ago </p> BusLine: ${ride.busLine}`
             };
+            // const job = await notificationsQueue.add({
+            //   foo: 'bar'
+            // });
             sendEmail(mailOptions);
             sendSMS();
           }
