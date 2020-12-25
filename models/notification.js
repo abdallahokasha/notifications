@@ -7,9 +7,11 @@ const notificationSchema = new Schema(
         userId: { type: String, required: true },
         userEmail: { type: String },
         userMobileNumber: { type: String },
-        mediumId: { type: Number },
+        mediumId: { type: Number, required: true },
         languageId: { type: Number },
-        plannedSendTime: {type: Date}
+        plannedSendTime: { type: Date },
+        priority: { type: Number },
+        status: { type: Number, required: true },
     },
     { timestamps: true }
 );
