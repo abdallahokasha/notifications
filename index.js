@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const config = require("./config/config");
 const v1 = require("./routes");
+const bull = require("bull");
 const checkRideUpdatesTask = require("./workers/checkRideUpdates");
 const app = express();
 
@@ -48,6 +49,20 @@ app.listen(port, () => {
 });
 
 checkRideUpdatesTask.start();
+
+const notificationsQueue = new bull('notifications-queue');
+
+notificationsQueue.process(async (job) => {
+  console.log("-- process function --");
+  return job.send();
+});
+
+// Define a local completed event
+notificationsQueue.on('completed', (job, result) => {
+  console.log(`Job ${job.data} completed with result ${result}`);
+})
+
+
 
 // db.once("open", () => {
 //   app.listen(port, () => {

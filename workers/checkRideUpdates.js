@@ -1,14 +1,20 @@
 const cron = require("node-cron");
 const bull = require("bull");
 const getRidesList = require("../utils/getRidesList");
-const sendEmail = require("../utils/mailer");
-const sendSMS = require("../utils/sendSMS");
+const NotificationsFactory = require("../utils/notifications/notificationsFactory");
+const notificationMediums = require("../utils/constants/notificationMediums");
 
-const notificationsQueue = new bull('notifications-queue');
+const notificationsQueue = new bull('notifications-queue', {
+  limiter: {
+    max: 10000, // Limit queue to max 10000 jobs per second.
+    duration: 1000
+  },
+  redis: {port: 6379, host: 'redis'}
+});
 
 var checkRideUpdatesTask = cron.schedule(
   "* * * * *",
-  () => {
+  async () => {
     const ridesList = getRidesList();
     console.debug("[checkRideUpdate worker] ridesList: ", ridesList);
     if (ridesList) {
@@ -20,11 +26,11 @@ var checkRideUpdatesTask = cron.schedule(
             subject: "Notifications service",
             html: `<p> Your Ride has been updated less than 5 mins ago </p> BusLine: ${ride.busLine}`
           };
-          // const job = await notificationsQueue.add({
-          //   foo: 'bar'
-          // });
-          sendEmail(mailOptions);
-          sendSMS();
+          // sendEmail(mailOptions);
+          // sendSMS();
+          var notificationFactory = new NotificationsFactory();
+          var notification = notificationFactory.createNotification(notificationMediums.EMAIL, mailOptions);
+          const job = await notificationsQueue.add(notification);
         }
         //}
       }
