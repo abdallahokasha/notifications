@@ -13,19 +13,19 @@ var checkRideUpdatesTask = cron.schedule(
     console.debug("[checkRideUpdate worker] ridesList: ", ridesList);
     if (ridesList) {
       for (ride of ridesList) {
-       // if (ride.updatedAt && Date.now() - ride.updatedAt <= 5 * 60 * 1000) {
-          if (ride.userEmail) {
-            var mailOptions = {
-              to: ride.userEmail,
-              subject: "Notifications service",
-              html: `<p> Your Ride has been updated less than 5 mins ago </p> BusLine: ${ride.busLine}`
-            };
-            // const job = await notificationsQueue.add({
-            //   foo: 'bar'
-            // });
-            sendEmail(mailOptions);
-            sendSMS();
-          }
+        // if (ride.updatedAt && Date.now() - ride.updatedAt <= 5 * 60 * 1000) {
+        if (ride.userEmail) {
+          var mailOptions = {
+            to: ride.userEmail,
+            subject: "Notifications service",
+            html: `<p> Your Ride has been updated less than 5 mins ago </p> BusLine: ${ride.busLine}`
+          };
+          // const job = await notificationsQueue.add({
+          //   foo: 'bar'
+          // });
+          sendEmail(mailOptions);
+          sendSMS();
+        }
         //}
       }
     } else {
