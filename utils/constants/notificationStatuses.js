@@ -4,4 +4,4 @@ const notificationStatuses = {
     CANCELLED: 3
 }
 
-module.exports = notificationMediums;
+module.exports = notificationStatuses;

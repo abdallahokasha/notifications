@@ -4,7 +4,7 @@ const getRidesList = require("../utils/getRidesList");
 const sendEmail = require("../utils/mailer");
 const sendSMS = require("../utils/sendSMS");
 
-const notificationsQueue = new Bull('notifications-queue');
+const notificationsQueue = new bull('notifications-queue');
 
 var checkRideUpdatesTask = cron.schedule(
   "* * * * *",
