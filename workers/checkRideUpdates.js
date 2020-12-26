@@ -4,13 +4,7 @@ const getRidesList = require("../utils/getRidesList");
 const NotificationsFactory = require("../utils/notifications/notificationsFactory");
 const notificationMediums = require("../utils/constants/notificationMediums");
 
-const notificationsQueue = new bull('notifications-queue', {
-  limiter: {
-    max: 10000, // Limit queue to max 10000 jobs per second.
-    duration: 1000
-  },
-  redis: {port: 6379, host: 'redis'}
-});
+const notificationsQueue = new bull('notifications-queue');
 
 var checkRideUpdatesTask = cron.schedule(
   "* * * * *",

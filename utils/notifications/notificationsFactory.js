@@ -3,7 +3,7 @@ const sendEmail = require("../../utils/mailer");
 const sendSMS = require("../../utils/sendSMS");
 
 function NotificationsFactory() {
-    this.createNotification = function (type, data) {
+    this.createNotification = function (type, data, receivers = []) {
         var notification;
 
         if (type === notificationMediums.SMS) {

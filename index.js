@@ -1,22 +1,26 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const Redis = require("ioredis");
+const bull = require("bull");
 require("dotenv").config();
 const config = require("./config/config");
 const v1 = require("./routes");
-const bull = require("bull");
 const checkRideUpdatesTask = require("./workers/checkRideUpdates");
 const app = express();
 
 const port = 5000;
+
 // const mongoURI =
 //   `mongodb://${config[process.env.NODE_ENV].host}:${
 //     config[process.env.NODE_ENV].port
 //   }/${config[process.env.NODE_ENV].database}` ||
 //   "mongodb://localhost:27017/pushme_db";
 
+const redis = new Redis("localhost");
+
 let mongoURI =
-  process.env.MONGO_DOCKER_URI || "mongodb://mongo/docker-node-mongo";
+  process.env.MONGO_DOCKER_URI || "mongodb://mongo/notifications_service";
 
 if (process.env.NODE_ENV === "test")
   mongoURI = process.env.MONGO_LOCAL_URI_FOR_TEST =
@@ -50,7 +54,13 @@ app.listen(port, () => {
 
 checkRideUpdatesTask.start();
 
-const notificationsQueue = new bull('notifications-queue');
+const notificationsQueue = new bull('notifications-queue', {
+  limiter: {
+    max: 10000, // Limit queue to max 10000 jobs per second.
+    duration: 1000
+  },
+  redis: { port: 6379, host: 'localhost' }
+});
 
 notificationsQueue.process(async (job) => {
   console.log("-- process function --");
@@ -63,23 +73,4 @@ notificationsQueue.on('completed', (job, result) => {
 })
 
 
-
-// db.once("open", () => {
-//   app.listen(port, () => {
-//     console.log(`Node server running on port ${port}`);
-//   });
-
-//   const rideCollection = db.collection("rides");
-//   const changeStream = rideCollection.watch();
-
-//   changeStream.on("change", change => {
-//     console.log(change);
-
-//     if (change.operationType === "insert") {
-//       console.log("MongoDB Listener: Hey an insertion recently occur ;) on Rides collection")
-//       // notify for insertion
-//     } else if (change.operationType === "delete") {
-//     }
-//   });
-// });
 module.exports = app;

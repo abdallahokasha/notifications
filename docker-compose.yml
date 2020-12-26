@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    container_name: docker-node-mongo
+    container_name: notifications_service
     restart: always
     build: .
     env_file: .env
@@ -13,12 +13,10 @@ services:
   mongo:
     container_name: mongo
     image: mongo
-    ports: 
+    ports:
       - "27017:27017"
   redis:
     container_name: redis
     image: redis
-    ports: 
+    ports:
       - "6379:6379"
-    expose:
-      - "6379"      
