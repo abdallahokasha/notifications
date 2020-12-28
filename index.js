@@ -17,7 +17,7 @@ const port = 5000;
 //   }/${config[process.env.NODE_ENV].database}` ||
 //   "mongodb://localhost:27017/pushme_db";
 
-const redis = new Redis("localhost");
+const redis = new Redis("redis");
 
 let mongoURI =
   process.env.MONGO_DOCKER_URI || "mongodb://mongo/notifications_service";
@@ -59,7 +59,7 @@ const notificationsQueue = new bull('notifications-queue', {
     max: 10000, // Limit queue to max 10000 jobs per second.
     duration: 1000
   },
-  redis: { port: 6379, host: 'localhost' }
+  redis: { port: 6379, host: 'redis' }
 });
 
 notificationsQueue.process(async (job) => {
