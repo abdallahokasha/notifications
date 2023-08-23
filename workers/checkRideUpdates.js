@@ -9,8 +9,8 @@ const notificationsQueue = new bull('notifications-queue');
 var checkRideUpdatesTask = cron.schedule(
   "* * * * *",
   async () => {
-    const ridesList = getRidesList();
-    console.debug("[checkRideUpdate worker] ridesList: ", ridesList);
+    const ridesList = getRidesList()
+    // console.debug("[checkRideUpdate worker] ridesList: ", ridesList)
     if (ridesList) {
       for (ride of ridesList) {
         // if (ride.updatedAt && Date.now() - ride.updatedAt <= 5 * 60 * 1000) {
@@ -19,11 +19,11 @@ var checkRideUpdatesTask = cron.schedule(
             to: ride.userEmail,
             subject: "Notifications service",
             html: `<p> Your Ride has been updated less than 5 mins ago </p> BusLine: ${ride.busLine}`
-          };
-          // sendEmail(mailOptions);
-          // sendSMS();
-          var notificationFactory = new NotificationsFactory();
+          }
+
+          var notificationFactory = new NotificationsFactory()
           var notification = notificationFactory.createNotification(notificationMediums.EMAIL, mailOptions);
+          console.debug("Before adding notification to the queue")
           const job = await notificationsQueue.add(notification);
         }
         //}

@@ -4,20 +4,20 @@ const sendSMS = require("../../utils/sendSMS");
 
 function NotificationsFactory() {
     this.createNotification = function (type, data, receivers = []) {
-        var notification;
+        var notification
 
         if (type === notificationMediums.SMS) {
-            notification = new SMSNotification();
+            notification = new SMSNotification()
         } else if (type === notificationMediums.EMAIL) {
-            notification = new EMAILNotification();
+            notification = new EMAILNotification()
         } else if (type === notificationMediums.PUSH_NOTIFICATION) {
-            notification = new PUSHNotification();
+            notification = new PUSHNotification()
         }
 
-        notification.type = type;
-        notification.data = data;
+        notification.type = type
+        notification.data = data
         
-        return notification;
+        return notification
     }
 }
 
